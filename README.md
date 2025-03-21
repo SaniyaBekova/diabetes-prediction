@@ -12,15 +12,24 @@ This is a Flask-based API that predicts Diabetes based on several factors like P
 The data used for this project comes from the [Kaggle](https://www.kaggle.com/datasets/mathchi/diabetes-data-set/data).
 
 The dataset includes important features such as:
-**Pregnancies:** Number of times pregnant
+**Pregnancies:** Number of times pregnant 
+
 **Glucose:** Plasma glucose concentration a 2 hours in an oral glucose tolerance test
+
 **BloodPressure:** Diastolic blood pressure (mm Hg)
+
 **SkinThickness:** Triceps skin fold thickness (mm)
+
 **Insulin:** 2-Hour serum insulin (mu U/ml)
+
 **BMI:** Body mass index (weight in kg/(height in m)^2)
+
 **DiabetesPedigreeFunction:** Diabetes pedigree function
+
 **Age:** Age (years)
+
 **Outcome:** Class variable (0 or 1)
+
 
 The full dataset can be accessed and downloaded from the Kaggle website at [Kaggle](https://www.kaggle.com/datasets/mathchi/diabetes-data-set/data).
 
@@ -48,8 +57,8 @@ Before you can set up and run this app, ensure you have the following software i
 ### 1. Clone the Repository
 First, clone this repository to your local machine:
 ```bash
-git clone https://github.com/tjhoranumass/airbnb.git
-cd airbnb
+git clone https://github.com/SaniyaBekova/diabetes-prediction.git
+cd diabetes-prediction
 ```
 
 ### 2. Create a Virtual Environment (Optional but Recommended)
