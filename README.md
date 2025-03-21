@@ -1,35 +1,38 @@
 
-# Airbnb Rental Price Prediction API
+# Diabetes Prediction API
 
-This is a Flask-based API that predicts Airbnb rental prices based on several factors like bedrooms, bathrooms, accommodation capacity, and neighborhood. The API has two main endpoints:
+This is a Flask-based API that predicts Diabetes based on several factors like Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age. The API has two main endpoints:
 - `/reload`: Reloads the data and trains the model.
-- `/predict`: Predicts the rental price for a given listing.
+- `/predict`: Predicts the diabetes for a given parameters.
 
 ## Data Source and Prediction Process
 
 ### Data Source
 
-The data used for this project comes from the [Inside Airbnb dataset](https://insideairbnb.com/get-the-data/), which provides detailed information about Airbnb listings in various cities. For this particular app, the data for Boston, MA is used.
+The data used for this project comes from the [Kaggle](https://www.kaggle.com/datasets/mathchi/diabetes-data-set/data).
 
 The dataset includes important features such as:
-- **Price**: The rental price of the listing.
-- **Bedrooms**: The number of bedrooms in the listing.
-- **Bathrooms**: The number of bathrooms in the listing.
-- **Accommodates**: The maximum number of guests the listing can accommodate.
-- **Neighbourhood**: The neighborhood where the listing is located.
+**Pregnancies:** Number of times pregnant
+**Glucose:** Plasma glucose concentration a 2 hours in an oral glucose tolerance test
+**BloodPressure:** Diastolic blood pressure (mm Hg)
+**SkinThickness:** Triceps skin fold thickness (mm)
+**Insulin:** 2-Hour serum insulin (mu U/ml)
+**BMI:** Body mass index (weight in kg/(height in m)^2)
+**DiabetesPedigreeFunction:** Diabetes pedigree function
+**Age:** Age (years)
+**Outcome:** Class variable (0 or 1)
 
-The full dataset can be accessed and downloaded from the Inside Airbnb website at [Inside Airbnb - Get the Data](https://insideairbnb.com/get-the-data/).
+The full dataset can be accessed and downloaded from the Kaggle website at [Kaggle](https://www.kaggle.com/datasets/mathchi/diabetes-data-set/data).
 
 ### Prediction Process
 
-The application makes use of a simple **Linear Regression Model** to predict the rental price of an Airbnb listing based on various input features such as the number of bedrooms, bathrooms, accommodation capacity, and the neighborhood.
+The application uses a **RandomForestClassifier** to predict the likelihood of diabetes based on several medical and physiological input features, including Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin, BMI, DiabetesPedigreeFunction, Age.
 
 The process of prediction is as follows:
-1. **Data Preprocessing**: The data is cleaned and processed. Non-numeric values are removed or converted, and categorical variables like `neighbourhood` are one-hot encoded to make them suitable for machine learning models.
-2. **Model Training**: A linear regression model is trained on the cleaned dataset using features like bedrooms, bathrooms, accommodates, and one-hot encoded neighborhood values.
-3. **Prediction**: Once trained, the model can predict the rental price based on user input, such as the number of bedrooms, bathrooms, and neighborhood.
+1. **Model Training**: The RandomForestClassifier is trained on a cleaned version of the diabetes dataset. The model learns patterns and relationships between input features and the target outcome (presence or absence of diabetes).
+2. **Prediction**: After training, the model can predict the probability of a patient having diabetes based on new input data provided by the user through the API.
 
-By using this model, the app can provide quick rental price predictions for Airbnb listings in Boston based on historical data.
+This approach allows the application to deliver reliable diabetes predictions in real-time using clinically relevant indicators.
 
 
 ## Prerequisites
@@ -139,19 +142,15 @@ To reload the data and train the model, use the `/reload` endpoint:
 curl -X POST http://127.0.0.1:5000/reload
 ```
 
-#### Predict Price
+#### Diabetes Prediction
 
-To predict a rental price, you can use the `/predict` endpoint. Here's an example request:
+To predict a diabetes, you can use the `/predict` endpoint. Here's an example request:
 
 ```bash
-curl -X POST http://127.0.0.1:5000/predict \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "bedrooms": 2,
-    "bathrooms": 1.5,
-    "accommodates": 4,
-    "neighbourhood_cleansed": "South Boston"
-}'
+curl -X POST "http://127.0.0.1:5000/predict" 
+-H "accept: application/json" 
+-H "Content-Type: application/json" 
+-d "{ \"Age\": 49, \"BMI\": 33.6, \"BloodPressure\": 72, \"DiabetesPedigreeFunction\": 0.627, \"Glucose\": 148, \"Insulin\": 0, \"Pregnancies\": 6, \"SkinThickness\": 35}"
 ```
 
 ### 9. Stopping the Application
@@ -209,85 +208,6 @@ pytest
 
 This will execute all the tests located in the `tests/` folder and provide feedback on the application behavior.
 
-## Deploying to Heroku
+Deployed API link:
 
-### 1. Install the Heroku CLI
 
-Before deploying the application to Heroku, you need to install the Heroku CLI. You can follow the steps below to install it on your machine.
-
-#### macOS:
-
-You can install the Heroku CLI using Homebrew:
-```bash
-brew tap heroku/brew && brew install heroku
-```
-
-#### Windows:
-
-Download and run the Heroku installer from the [Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli).
-
-#### Verify Installation:
-
-Once installed, verify the installation by running:
-
-```bash
-heroku --version
-```
-
-You should see the version of Heroku CLI installed.
-
-### 2. Log in to Heroku
-
-Log in to your Heroku account from the terminal:
-
-```bash
-heroku login
-```
-
-This will open a web browser for you to log in to your Heroku account.
-
-### 3. Prepare the App for Deployment
-
-Ensure your `requirements.txt` and `Procfile` are present in the project root.
-
-- **Procfile**: Create a `Procfile` in the root directory with the following content to tell Heroku how to run the app:
-
-```bash
-web: flask run --host=0.0.0.0 --port=$PORT
-```
-
-### 4. Create a Heroku App
-
-Run the following command to create a new Heroku app:
-
-```bash
-heroku create
-```
-
-### 5. Deploy to Heroku
-
-After you've created your Heroku app, deploy your app using Git:
-
-```bash
-git add .
-git commit -m "Initial commit"
-git push heroku main
-```
-
-### 6. Scale the Application
-
-Heroku apps require at least one running dyno. Scale your app to run one web dyno:
-
-```bash
-heroku ps:scale web=1
-```
-
-### 7. Open the App
-
-Once your app is deployed, you can open it in the browser using:
-
-```bash
-heroku open
-```
-
-Your app should now be live on Heroku!
