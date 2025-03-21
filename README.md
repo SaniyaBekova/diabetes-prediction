@@ -208,6 +208,5 @@ pytest
 
 This will execute all the tests located in the `tests/` folder and provide feedback on the application behavior.
 
-Deployed API link:
-
+Deployed API link: https://diabetes-prediction-ilzx.onrender.com/apidocs/
 
