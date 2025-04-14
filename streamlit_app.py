@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import plotly.express as px
 
-API_BASE = "http://127.0.0.1:5000"
+API_BASE = "https://diabetes-prediction-ilzx.onrender.com"
 
 st.set_page_config(page_title="Diabetes Prediction", layout="wide")
 st.title("🩺 Diabetes Prediction Dashboard")
