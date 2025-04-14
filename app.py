@@ -19,8 +19,13 @@ app.config['SWAGGER'] = {
 }
 swagger = Swagger(app)
 
+import os
+
+DB_PATH = os.path.abspath("diabetes.db")  # This ensures both apps use the same file
+SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
+
 # SQLite DB setup
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diabetes.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 db = SQLAlchemy(app)
 
 class Diabetes(db.Model):
@@ -186,6 +191,36 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/data', methods=['GET'])
+def get_data():
+    """
+    Get full diabetes dataset.
+    ---
+    responses:
+      200:
+        description: Returns all diabetes entries in JSON
+    """
+    entries = Diabetes.query.all()
+    result = [
+        {
+            "Pregnancies": e.Pregnancies,
+            "Glucose": e.Glucose,
+            "BloodPressure": e.BloodPressure,
+            "SkinThickness": e.SkinThickness,
+            "Insulin": e.Insulin,
+            "BMI": e.BMI,
+            "DiabetesPedigreeFunction": e.DiabetesPedigreeFunction,
+            "Age": e.Age,
+            "Outcome": e.Outcome
+        }
+        for e in entries
+    ]
+    return jsonify(result)
+
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+        print("Tables created:", db.engine.table_names())
     app.run(debug=True)
